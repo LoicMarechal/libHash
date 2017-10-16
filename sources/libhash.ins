@@ -1,0 +1,25 @@
+
+        external hshnewtable
+		external hshfreetable
+		external hshadditem
+		external hshdeleteitem
+		external hshgetitem
+
+        integer*8 hshnewtable
+		integer hshfreetable
+		integer hshadditem
+		integer hshdeleteitem
+		integer hshgetitem
+
+        integer HshAny, HshVer, HshEdg, HshTri, HshQad
+		integer HshTet, HshPyr, HshPri, HshHex
+
+		parameter (HshAny=0)
+		parameter (HshVer=1)
+		parameter (HshEdg=2)
+		parameter (HshTri=3)
+		parameter (HshQad=4)
+		parameter (HshTet=5)
+		parameter (HshPyr=6)
+		parameter (HshPri=7)
+		parameter (HshHex=8)
