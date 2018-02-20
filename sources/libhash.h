@@ -9,7 +9,7 @@
 /*   Description:       various operations on hash tables                     */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 25 2015                                           */
-/*   Last modification: oct 23 2015                                           */
+/*   Last modification: feb 20 2018                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -18,7 +18,7 @@
 /* Defines                                                                    */
 /*----------------------------------------------------------------------------*/
 
-enum HshTyp {HshAny, HshVer, HshEdg, HshTri, HshQad, HshTet, HshPyr, HshPri, HshHex};
+enum HshTyp {HshVer, HshEdg, HshTri, HshQad, HshTet, HshPyr, HshPri, HshHex, HshAny};
 
 
 /*----------------------------------------------------------------------------*/
