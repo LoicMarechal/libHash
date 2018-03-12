@@ -2,14 +2,14 @@
 
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
-/*                               LIBHASH 1.21                                 */
+/*                               LIBHASH 1.30                                 */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*   Description:       various operations on hash tables                     */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 25 2015                                           */
-/*   Last modification: feb 20 2018                                           */
+/*   Last modification: mar 12 2018                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -29,4 +29,4 @@ int64_t  hsh_NewTable   ();
 int      hsh_FreeTable  (int64_t);
 int      hsh_AddItem    (int64_t, int, int, int, int);
 int      hsh_DeleteItem (int64_t, int, int, int);
-int      hsh_GetItem    (int64_t, int, int, int *, int **, char **);
+int      hsh_GetItem    (int64_t, int, int, int, int *, int **, char **);

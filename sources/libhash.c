@@ -2,14 +2,14 @@
 
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
-/*                               LIBHASH 1.21                                 */
+/*                               LIBHASH 1.30                                 */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*   Description:       various operations on hash tables                     */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 25 2015                                           */
-/*   Last modification: dec 07 2015                                           */
+/*   Last modification: mar 12 2018                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -33,16 +33,20 @@
 #define UpdThr 2
 #define IniBufSiz 10000
 
+#ifndef MaxPth
+#define MaxPth 128
+#endif
+
 
 /*----------------------------------------------------------------------------*/
 /* Macros                                                                     */
 /*----------------------------------------------------------------------------*/
 
 #ifndef min
-#define min(a,b) ((a) < (b) ? (a) : (b))
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b) ((a) > (b) ? (a) : (b))
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
 #endif
 
 #ifdef i8
@@ -71,8 +75,9 @@ typedef struct TplSctPtr
 
 typedef struct
 {
-   char *typ;
-   int IdxSiz, BlkSiz, NmbHsh, NmbTpl, BufSiz[ MaxKey ], *buf[ MaxKey ];
+   char *typ[ MaxPth ];
+   int IdxSiz, BlkSiz, NmbHsh, NmbTpl;
+   int BufSiz[ MaxPth ][ MaxKey ], *buf[ MaxPth ][ MaxKey ];
    int64_t mem;
    TplSct **idx, *tpl, *IniBlk;
 }HshTabSct;
@@ -84,7 +89,7 @@ typedef struct
 
 int64_t hsh_NewTable()
 {
-   int i;
+   int i, p;
    HshTabSct *tab;
 
    // Allocate the head table structure
@@ -92,14 +97,16 @@ int64_t hsh_NewTable()
    tab->mem = sizeof(HshTabSct);
 
    // Allocate a local buffer for each key
-   assert(tab->typ = malloc(IniBufSiz * sizeof(char)));
+   for(p=0;p<MaxPth;p++)
+      assert(tab->typ[p] = malloc(IniBufSiz * sizeof(char)));
 
-   for(i=0;i<MaxKey;i++)
-   {
-      tab->BufSiz[i] = IniBufSiz;
-      assert(tab->buf[i] = malloc(tab->BufSiz[i] * sizeof(int)));
-      tab->mem += tab->BufSiz[i] * sizeof(int);
-   }
+   for(p=0;p<MaxPth;p++)
+      for(i=0;i<MaxKey;i++)
+      {
+         tab->BufSiz[p][i] = IniBufSiz;
+         assert(tab->buf[p][i] = malloc(tab->BufSiz[p][i] * sizeof(int)));
+         tab->mem += tab->BufSiz[p][i] * sizeof(int);
+      }
 
    // Allocate the index table
    tab->IdxSiz = IniBufSiz;
@@ -124,7 +131,7 @@ int hsh_FreeTable(int64_t HshIdx)
 {
    HshTabSct *tab = (HshTabSct *)HshIdx;
    TplSct *nxt, *tpl = tab->IniBlk;
-   int i, byt = 0;
+   int i, p, byt = 0;
 
    if(tab->NmbHsh > 0)
       byt = tab->mem / tab->NmbHsh;
@@ -139,18 +146,20 @@ int hsh_FreeTable(int64_t HshIdx)
    }while((tpl = nxt));
 
    // Free the local search buffers of each key levels
-   for(i=0;i<MaxKey;i++)
-   {
-      free(tab->buf[i]);
-      tab->mem -= tab->BufSiz[i] * sizeof(int);
-   }
+   for(p=0;p<MaxPth;p++)
+      for(i=0;i<MaxKey;i++)
+      {
+         free(tab->buf[p][i]);
+         tab->mem -= tab->BufSiz[p][i] * sizeof(int);
+      }
 
    // Free the main index table
    free(tab->idx);
    tab->mem -= tab->IdxSiz * sizeof(void *);
 
    // Free the types table
-   free(tab->typ);
+   for(p=0;p<MaxPth;p++)
+      free(tab->typ[p]);
    //tab->mem -= tab->BufSiz[i] * sizeof(char);
 
    // And finaly, free the head structure. The tab->mem counter should be 0
@@ -297,7 +306,7 @@ int hsh_DeleteItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx)
 /* Find all entries that match the set of vertices                            */
 /*----------------------------------------------------------------------------*/
 
-int hsh_GetItem(  int64_t HshIdx, int typ, int NmbVer,
+int hsh_GetItem(  int64_t HshIdx, int PthIdx, int typ, int NmbVer,
                   int *VerTab, int **EleTab, char **TypTab )
 {
    HshTabSct *tab = (HshTabSct *)HshIdx;
@@ -329,7 +338,7 @@ int hsh_GetItem(  int64_t HshIdx, int typ, int NmbVer,
                   InsFlg = 0;
 
                   for(k=0;k<pos[i-1];k++)
-                     if(tpl->tab[j] == tab->buf[i-1][k])
+                     if(tpl->tab[j] == tab->buf[ PthIdx ][i-1][k])
                      {
                         InsFlg = 1;
                         break;
@@ -343,27 +352,27 @@ int hsh_GetItem(  int64_t HshIdx, int typ, int NmbVer,
                // realloc the buffer with double the size
                if(InsFlg)
                {
-                  tab->buf[i][ pos[i] ] = tpl->tab[j];
+                  tab->buf[ PthIdx ][i][ pos[i] ] = tpl->tab[j];
 
                   // Fill types table only if it is requested from the user
                   // and the last key is beeing parsed
                   if(TypTab && (i == NmbVer-1) )
-                     tab->typ[ pos[i] ] = tpl->typ;
+                     tab->typ[ PthIdx ][ pos[i] ] = tpl->typ;
 
                   pos[i]++;
 
-                  if(pos[i] == tab->BufSiz[i])
+                  if(pos[i] == tab->BufSiz[ PthIdx ][i])
                   {
-                     assert(tab->buf[i] = realloc(tab->buf[i], tab->BufSiz[i] * UpdThr * sizeof(int)));
-                     tab->mem += tab->BufSiz[i] * (UpdThr -1) * sizeof(int);
+                     assert(tab->buf[ PthIdx ][i] = realloc(tab->buf[ PthIdx ][i], tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(int)));
+                     tab->mem += tab->BufSiz[ PthIdx ][i] * (UpdThr - 1) * sizeof(int);
 
                      if(TypTab && (i == NmbVer-1) )
                      {
-                        assert(tab->typ = realloc(tab->typ, tab->BufSiz[i] * UpdThr * sizeof(char)));
-                        tab->mem += tab->BufSiz[i] * (UpdThr -1) * sizeof(char);
+                        assert(tab->typ[ PthIdx ] = realloc(tab->typ[ PthIdx ], tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(char)));
+                        tab->mem += tab->BufSiz[ PthIdx ][i] * (UpdThr - 1) * sizeof(char);
                      }
 
-                     tab->BufSiz[i] *= UpdThr;
+                     tab->BufSiz[ PthIdx ][i] *= UpdThr;
                   }
                }
             }
@@ -374,10 +383,10 @@ int hsh_GetItem(  int64_t HshIdx, int typ, int NmbVer,
    }
 
    // Return last level tables into user's pointers
-   *EleTab = tab->buf[ NmbVer-1 ];
+   *EleTab = tab->buf[ PthIdx ][ NmbVer-1 ];
 
    if(TypTab)
-      *TypTab = tab->typ;
+      *TypTab = tab->typ[ PthIdx ];
 
    // Return the number of elements in the last level table,
    // it is the intersection between every lists
@@ -409,15 +418,15 @@ lng call(hshdeleteitem)(int64_t *HshIdx, lng *typ, lng *VerIdx, lng *EleIdx)
    return(hsh_DeleteItem(*HshIdx, *typ, *VerIdx, *EleIdx));
 }
 
-lng call(hshgetitem)(int64_t *HshIdx, lng *typ, lng *NmbVer, lng *VerTab,
+lng call(hshgetitem)(int64_t *HshIdx, lng *PthIdx, lng *typ, lng *NmbVer, lng *VerTab,
                      lng *TabSiz, lng *EleTab, char *TypTab)
 {
    char *TmpTypTab=NULL;
    int i;
    lng NmbEle, *TmpEleTab=NULL;
 
-   NmbEle = hsh_GetItem(*HshIdx, *typ, *NmbVer, VerTab, &TmpEleTab, &TmpTypTab);
-   NmbEle = min(NmbEle, *TabSiz);
+   NmbEle = hsh_GetItem(*HshIdx, *PthIdx, *typ, *NmbVer, VerTab, &TmpEleTab, &TmpTypTab);
+   NmbEle = MIN(NmbEle, *TabSiz);
 
    if(TmpEleTab)
       for(i=0;i<NmbEle;i++)

@@ -10,7 +10,7 @@
 /*   Description:       derive the surface from the volume                    */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 30 2015                                           */
-/*   Last modification: oct 16 2017                                           */
+/*   Last modification: mar 12 2018                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
             for(k=0;k<3;k++)
                VerFac[k] = TetTab[i].idx[ tettvpf[j][k] ];
 
-            if(hsh_GetItem(HshIdx, HshAny, 3, VerFac, &EleTab, &TypTab) == 1)
+            if(hsh_GetItem(HshIdx, 0, HshAny, 3, VerFac, &EleTab, &TypTab) == 1)
             {
                NmbTri++;
 
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
                for(k=0;k<3;k++)
                   VerFac[k] = PyrTab[i].idx[ pyrtvpf[j][k] ];
 
-               if(hsh_GetItem(HshIdx, HshAny, 3, VerFac, &EleTab, &TypTab) == 1)
+               if(hsh_GetItem(HshIdx, 0, HshAny, 3, VerFac, &EleTab, &TypTab) == 1)
                {
                   NmbTri++;
 
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
                for(k=0;k<4;k++)
                   VerFac[k] = PyrTab[i].idx[ pyrtvpf[j][k] ];
 
-               if(hsh_GetItem(HshIdx, HshAny, 4, VerFac, &EleTab, &TypTab) == 1)
+               if(hsh_GetItem(HshIdx, 0, HshAny, 4, VerFac, &EleTab, &TypTab) == 1)
                {
                   NmbQad++;
 
@@ -288,7 +288,7 @@ int main(int argc, char **argv)
                for(k=0;k<3;k++)
                   VerFac[k] = PriTab[i].idx[ pritvpf[j][k] ];
 
-               if(hsh_GetItem(HshIdx, HshAny, 3, VerFac, &EleTab, &TypTab) == 1)
+               if(hsh_GetItem(HshIdx, 0, HshAny, 3, VerFac, &EleTab, &TypTab) == 1)
                {
                   NmbTri++;
 
@@ -301,7 +301,7 @@ int main(int argc, char **argv)
                for(k=0;k<4;k++)
                   VerFac[k] = PriTab[i].idx[ pritvpf[j][k] ];
 
-               if(hsh_GetItem(HshIdx, HshAny, 4, VerFac, &EleTab, &TypTab) == 1)
+               if(hsh_GetItem(HshIdx, 0, HshAny, 4, VerFac, &EleTab, &TypTab) == 1)
                {
                   NmbQad++;
 
@@ -322,7 +322,7 @@ int main(int argc, char **argv)
             for(k=0;k<4;k++)
                VerFac[k] = HexTab[i].idx[ hextvpf[j][k] ];
 
-            if(hsh_GetItem(HshIdx, HshAny, 4, VerFac, &EleTab, &TypTab) == 1)
+            if(hsh_GetItem(HshIdx, 0, HshAny, 4, VerFac, &EleTab, &TypTab) == 1)
             {
                NmbQad++;
 
