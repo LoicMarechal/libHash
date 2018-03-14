@@ -9,32 +9,31 @@
 #   Description:        various operations on hash tables                     #
 #   Author:             Loic MARECHAL                                         #
 #   Creation date:      sep 25 2015                                           #
-#   Last modification:  dec 07 2015                                           #
+#   Last modification:  mar 14 2018                                           #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
 
-CC     =  gcc
-CFLAGS =  -O3 -Wunused-parameter -Wsign-compare -Wuninitialized -Wunused -Wall
+# Set compiler and flags
+CC       =  gcc
+CFLAGS   =  -O3 -Wunused-parameter -Wsign-compare -Wuninitialized -Wunused -Wall
 
 
 # Working directories
-
-LIBDIR  = $(HOME)/lib/$(ARCHI)
-INCDIR  = $(HOME)/include
-SRCSDIR = sources
-OBJSDIR = objects/$(ARCHI)
-ARCHDIR = archives
-DIRS    = objects $(LIBDIR) $(OBJSDIR) $(ARCHDIR) $(INCDIR)
-VPATH   = $(SRCSDIR)
+LIBDIR   = $(HOME)/lib/$(ARCHI)
+INCDIR   = $(HOME)/include
+SRCSDIR  = sources
+OBJSDIR  = objects/$(ARCHI)
+ARCHDIR  = archives
+DIRS     = objects $(LIBDIR) $(OBJSDIR) $(ARCHDIR) $(INCDIR)
+VPATH    = $(SRCSDIR)
 
 
 # Files to be compiled
-
-SRCS = $(wildcard $(SRCSDIR)/*.c)
-HDRS = $(wildcard $(SRCSDIR)/*.h)
-OBJS = $(patsubst $(SRCSDIR)%, $(OBJSDIR)%, $(SRCS:.c=.o))
-LIB = libhash.a
+SRCS     = $(wildcard $(SRCSDIR)/*.c)
+HDRS     = $(wildcard $(SRCSDIR)/*.h)
+OBJS     = $(patsubst $(SRCSDIR)%, $(OBJSDIR)%, $(SRCS:.c=.o))
+LIB      = libhash.a
 
 
 # Definition of the compiling implicit rule
@@ -60,6 +59,7 @@ $(DIRS):
 # Remove temporary files
 clean:
 	rm -f $(OBJS) $(LIBDIR)/$(LIB)
+
 
 # Build a dated archive including sources, patterns and makefile
 tar: $(DIRS)
