@@ -9,7 +9,7 @@
 /*   Description:       various operations on hash tables                     */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 25 2015                                           */
-/*   Last modification: mar 12 2018                                           */
+/*   Last modification: oct 15 2018                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -93,29 +93,36 @@ int64_t hsh_NewTable()
    HshTabSct *tab;
 
    // Allocate the head table structure
-   assert((tab = calloc(1, sizeof(HshTabSct))));
+   tab = calloc(1, sizeof(HshTabSct));
+   assert(tab);
    tab->mem = sizeof(HshTabSct);
 
    // Allocate a local buffer for each key
    for(p=0;p<MaxPth;p++)
-      assert((tab->typ[p] = malloc(IniBufSiz * sizeof(char))));
+   {
+      tab->typ[p] = malloc(IniBufSiz * sizeof(char));
+      assert(tab->typ[p]);
+   }
 
    for(p=0;p<MaxPth;p++)
       for(i=0;i<MaxKey;i++)
       {
          tab->BufSiz[p][i] = IniBufSiz;
-         assert((tab->buf[p][i] = malloc(tab->BufSiz[p][i] * sizeof(int))));
+         tab->buf[p][i] = malloc(tab->BufSiz[p][i] * sizeof(int));
+         assert(tab->buf[p][i]);
          tab->mem += tab->BufSiz[p][i] * sizeof(int);
       }
 
    // Allocate the index table
    tab->IdxSiz = IniBufSiz;
-   assert((tab->idx = calloc(tab->IdxSiz, sizeof(void *))));
+   tab->idx = calloc(tab->IdxSiz, sizeof(void *));
+   assert(tab->idx);
    tab->mem += tab->IdxSiz * sizeof(void *);
 
    // Allocate the first block of tupples
    tab->BlkSiz = IniBufSiz;
-   assert((tab->tpl = tab->IniBlk = calloc(tab->BlkSiz, sizeof(TplSct))));
+   tab->tpl = tab->IniBlk = calloc(tab->BlkSiz, sizeof(TplSct));
+   assert(tab->tpl);
    tab->mem += tab->BlkSiz * sizeof(TplSct);
 
    // Return a pointer to the head structure casted into a int64_t int
@@ -223,7 +230,8 @@ int hsh_AddItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx, int ChkFlg)
       {
          EndTpl = &tab->tpl[ tab->NmbTpl ];
          EndTpl->typ = -1;
-         assert((tab->tpl = EndTpl->nxt = calloc(tab->BlkSiz, sizeof(TplSct))));
+         tab->tpl = EndTpl->nxt = calloc(tab->BlkSiz, sizeof(TplSct));
+         assert(tab->tpl);
          tab->NmbTpl = 0;
          tab->mem += tab->BlkSiz * sizeof(TplSct);
       }
@@ -234,7 +242,8 @@ int hsh_AddItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx, int ChkFlg)
       if(tab->NmbHsh > TplSiz * tab->IdxSiz * UpdThr)
       {
          NewSiz = tab->IdxSiz * UpdThr;
-         assert((NewTab = calloc(NewSiz, sizeof(void *))));
+         NewTab = calloc(NewSiz, sizeof(void *));
+         assert(NewTab);
          tab->mem += NewSiz * sizeof(void *);
 
          for(i=0;i<tab->IdxSiz;i++)
@@ -363,14 +372,16 @@ int hsh_GetItem(  int64_t HshIdx, int PthIdx, int typ, int NmbVer,
 
                   if(pos[i] == tab->BufSiz[ PthIdx ][i])
                   {
-                     assert((tab->buf[ PthIdx ][i] = realloc(tab->buf[ PthIdx ][i],
-                        tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(int))));
+                     tab->buf[ PthIdx ][i] = realloc(tab->buf[ PthIdx ][i],
+                        tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(int));
+                     assert(tab->buf[ PthIdx ][i]);
                      tab->mem += tab->BufSiz[ PthIdx ][i] * (UpdThr - 1) * sizeof(int);
 
                      if(TypTab && (i == NmbVer-1) )
                      {
-                        assert((tab->typ[ PthIdx ] = realloc(tab->typ[ PthIdx ],
-                           tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(char))));
+                        tab->typ[ PthIdx ] = realloc(tab->typ[ PthIdx ],
+                           tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(char));
+                        assert(tab->typ[ PthIdx ]);
                         tab->mem += tab->BufSiz[ PthIdx ][i] * (UpdThr - 1) * sizeof(char);
                      }
 
