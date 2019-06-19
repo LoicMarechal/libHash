@@ -18,6 +18,10 @@
 CC       =  gcc
 CFLAGS   =  -O3 -Wunused-parameter -Wsign-compare -Wuninitialized -Wunused -Wall
 
+ifeq ($(int), 64)
+   CFLAGS   += -DINT64
+endif
+
 
 # Working directories
 LIBDIR   = $(HOME)/lib/$(ARCHI)

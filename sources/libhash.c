@@ -2,14 +2,14 @@
 
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
-/*                               LIBHASH 1.30                                 */
+/*                               LIBHASH 1.40                                 */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*   Description:       various operations on hash tables                     */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 25 2015                                           */
-/*   Last modification: oct 15 2018                                           */
+/*   Last modification: jun 19 2019                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -34,7 +34,7 @@
 #define IniBufSiz 10000
 
 #ifndef MaxPth
-#define MaxPth 128
+#define MaxPth 256
 #endif
 
 
@@ -47,12 +47,6 @@
 #endif
 #ifndef max
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
-#endif
-
-#ifdef i8
-#define lng int64_t
-#else
-#define lng int
 #endif
 
 #if defined(_NO_UNDER_SCORE)
@@ -68,17 +62,17 @@
 
 typedef struct TplSctPtr
 {
-   char typ, cpt;
-   int idx, tab[ TplSiz ];
-   struct TplSctPtr *nxt;
+   char     typ, cpt;
+   itg      idx, tab[ TplSiz ];
+   struct   TplSctPtr *nxt;
 }TplSct;
 
 typedef struct
 {
-   char *typ[ MaxPth ];
-   int IdxSiz, BlkSiz, NmbHsh, NmbTpl;
-   int BufSiz[ MaxPth ][ MaxKey ], *buf[ MaxPth ][ MaxKey ];
-   int64_t mem;
+   char     *typ[ MaxPth ];
+   itg      IdxSiz, BlkSiz, NmbHsh, NmbTpl;
+   itg      BufSiz[ MaxPth ][ MaxKey ], *buf[ MaxPth ][ MaxKey ];
+   int64_t  mem;
    TplSct **idx, *tpl, *IniBlk;
 }HshTabSct;
 
@@ -89,7 +83,7 @@ typedef struct
 
 int64_t hsh_NewTable()
 {
-   int i, p;
+   itg i, p;
    HshTabSct *tab;
 
    // Allocate the head table structure
@@ -108,9 +102,9 @@ int64_t hsh_NewTable()
       for(i=0;i<MaxKey;i++)
       {
          tab->BufSiz[p][i] = IniBufSiz;
-         tab->buf[p][i] = malloc(tab->BufSiz[p][i] * sizeof(int));
+         tab->buf[p][i] = malloc(tab->BufSiz[p][i] * sizeof(itg));
          assert(tab->buf[p][i]);
-         tab->mem += tab->BufSiz[p][i] * sizeof(int);
+         tab->mem += tab->BufSiz[p][i] * sizeof(itg);
       }
 
    // Allocate the index table
@@ -134,11 +128,11 @@ int64_t hsh_NewTable()
 /* Free the hash table and all linked tupple tables                           */
 /*----------------------------------------------------------------------------*/
 
-int hsh_FreeTable(int64_t HshIdx)
+itg hsh_FreeTable(int64_t HshIdx)
 {
    HshTabSct *tab = (HshTabSct *)HshIdx;
    TplSct *nxt, *tpl = tab->IniBlk;
-   int i, p, byt = 0;
+   itg i, p, byt = 0;
 
    if(tab->NmbHsh > 0)
       byt = tab->mem / tab->NmbHsh;
@@ -157,7 +151,7 @@ int hsh_FreeTable(int64_t HshIdx)
       for(i=0;i<MaxKey;i++)
       {
          free(tab->buf[p][i]);
-         tab->mem -= tab->BufSiz[p][i] * sizeof(int);
+         tab->mem -= tab->BufSiz[p][i] * sizeof(itg);
       }
 
    // Free the main index table
@@ -182,10 +176,10 @@ int hsh_FreeTable(int64_t HshIdx)
 /* Add an element in the table according to its vertex index                  */
 /*----------------------------------------------------------------------------*/
 
-int hsh_AddItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx, int ChkFlg)
+itg hsh_AddItem(int64_t HshIdx, itg typ, itg VerIdx, itg EleIdx, itg ChkFlg)
 {
    HshTabSct *tab = (HshTabSct *)HshIdx;
-   int i, NewSiz, NewKey, key = VerIdx % tab->IdxSiz;
+   itg i, NewSiz, NewKey, key = VerIdx % tab->IdxSiz;
    TplSct *tpl = tab->idx[ key ], **NewTab, *nxt, *OldTpl, *EndTpl, *FreTpl=NULL;
 
    // Check whether this pair vertex/element is not present in the hash table
@@ -212,7 +206,7 @@ int hsh_AddItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx, int ChkFlg)
    // If not present and a partialy filled tupple was found, store it
    if(FreTpl)
    {
-      FreTpl->tab[ (int)FreTpl->cpt++ ] = EleIdx;
+      FreTpl->tab[ (itg)FreTpl->cpt++ ] = EleIdx;
       tab->NmbHsh++;
       return(1);
    }
@@ -270,7 +264,7 @@ int hsh_AddItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx, int ChkFlg)
    // When a new tupple is found, initialize it with this vertex, type and element
    tpl->idx = VerIdx;
    tpl->typ = typ;
-   tpl->tab[ (int)tpl->cpt++ ] = EleIdx;
+   tpl->tab[ (itg)tpl->cpt++ ] = EleIdx;
    tpl->nxt = tab->idx[ key ];
    tab->idx[ key ] = tpl;
    tab->NmbHsh++;
@@ -283,10 +277,10 @@ int hsh_AddItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx, int ChkFlg)
 /* Remove a pair element-vertex from the table                                */
 /*----------------------------------------------------------------------------*/
 
-int hsh_DeleteItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx)
+itg hsh_DeleteItem(int64_t HshIdx, itg typ, itg VerIdx, itg EleIdx)
 {
    HshTabSct *tab = (HshTabSct *)HshIdx;
-   int i, j, key = VerIdx % tab->IdxSiz;
+   itg i, j, key = VerIdx % tab->IdxSiz;
    TplSct *tpl = tab->idx[ key ];
 
    while(tpl)
@@ -315,11 +309,11 @@ int hsh_DeleteItem(int64_t HshIdx, int typ, int VerIdx, int EleIdx)
 /* Find all entries that match the set of vertices                            */
 /*----------------------------------------------------------------------------*/
 
-int hsh_GetItem(  int64_t HshIdx, int PthIdx, int typ, int NmbVer,
-                  int *VerTab, int **EleTab, char **TypTab )
+itg hsh_GetItem(  int64_t HshIdx, itg PthIdx, itg typ, itg NmbVer,
+                  itg *VerTab, itg **EleTab, char **TypTab )
 {
    HshTabSct *tab = (HshTabSct *)HshIdx;
-   int i, j, k, key, InsFlg, pos[ MaxKey ];
+   itg i, j, k, key, InsFlg, pos[ MaxKey ];
    TplSct *tpl;
 
    if( (NmbVer > MaxKey) || !VerTab || !EleTab )
@@ -373,9 +367,9 @@ int hsh_GetItem(  int64_t HshIdx, int PthIdx, int typ, int NmbVer,
                   if(pos[i] == tab->BufSiz[ PthIdx ][i])
                   {
                      tab->buf[ PthIdx ][i] = realloc(tab->buf[ PthIdx ][i],
-                        tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(int));
+                        tab->BufSiz[ PthIdx ][i] * UpdThr * sizeof(itg));
                      assert(tab->buf[ PthIdx ][i]);
-                     tab->mem += tab->BufSiz[ PthIdx ][i] * (UpdThr - 1) * sizeof(int);
+                     tab->mem += tab->BufSiz[ PthIdx ][i] * (UpdThr - 1) * sizeof(itg);
 
                      if(TypTab && (i == NmbVer-1) )
                      {
@@ -416,27 +410,27 @@ int64_t call(hshnewtable)()
    return(hsh_NewTable());
 }
 
-lng call(hshfreetable)(int64_t *HshIdx)
+itg call(hshfreetable)(int64_t *HshIdx)
 {
    return(hsh_FreeTable(*HshIdx));
 }   
 
-lng call(hshadditem)(int64_t *HshIdx, lng *typ, lng *VerIdx, lng *EleIdx, lng *ChkFlg)
+itg call(hshadditem)(int64_t *HshIdx, itg *typ, itg *VerIdx, itg *EleIdx, itg *ChkFlg)
 {
    return(hsh_AddItem(*HshIdx, *typ, *VerIdx, *EleIdx, *ChkFlg));
 }
 
-lng call(hshdeleteitem)(int64_t *HshIdx, lng *typ, lng *VerIdx, lng *EleIdx)
+itg call(hshdeleteitem)(int64_t *HshIdx, itg *typ, itg *VerIdx, itg *EleIdx)
 {
    return(hsh_DeleteItem(*HshIdx, *typ, *VerIdx, *EleIdx));
 }
 
-lng call(hshgetitem)(int64_t *HshIdx, lng *PthIdx, lng *typ, lng *NmbVer, lng *VerTab,
-                     lng *TabSiz, lng *EleTab, char *TypTab)
+itg call(hshgetitem)(int64_t *HshIdx, itg *PthIdx, itg *typ, itg *NmbVer, itg *VerTab,
+                     itg *TabSiz, itg *EleTab, char *TypTab)
 {
    char *TmpTypTab=NULL;
-   int i;
-   lng NmbEle, *TmpEleTab=NULL;
+   itg i;
+   itg NmbEle, *TmpEleTab=NULL;
 
    NmbEle = hsh_GetItem(*HshIdx, *PthIdx, *typ, *NmbVer, VerTab, &TmpEleTab, &TmpTypTab);
    NmbEle = MIN(NmbEle, *TabSiz);
