@@ -1,0 +1,6 @@
+A FAIRE :
+
+
+FAIT :
+
+-passer les entiers en 64 bits.

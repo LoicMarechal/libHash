@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------#
 #                                                                             #
-#                          Hash table library   V1.21                         #
+#                          Hash table library   V1.40                         #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 #                                                                             #
 #   Description:        various operations on hash tables                     #
 #   Author:             Loic MARECHAL                                         #
 #   Creation date:      sep 25 2015                                           #
-#   Last modification:  mar 14 2018                                           #
+#   Last modification:  jun 19 2019                                           #
 #                                                                             #
 #-----------------------------------------------------------------------------#
 
