@@ -1,6 +1,9 @@
 A FAIRE :
 
+-transférer sur GitHub
+
 
 FAIT :
 
 -passer les entiers en 64 bits.
+-rédiger la documentation
