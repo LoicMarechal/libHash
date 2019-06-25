@@ -45,7 +45,7 @@ for(i=1;i<=NmbTet;i++)
 vertex = 150;
 degree = hsh_GetItem(LibIdx, 0, HshAny, 1, &vertex, &ball, NULL);
 for(i=0;i<degree;i++)
-   printf("%dn", ball[i]);
+   printf("%d\n", ball[i]);
 
 hsh_FreeTable(HshIdx)
 ```
