@@ -1,25 +1,44 @@
 
-        external hshnewtable
-		external hshfreetable
-		external hshadditem
-		external hshdeleteitem
-		external hshgetitem
 
-        integer*8 hshnewtable
-		integer hshfreetable
-		integer hshadditem
-		integer hshdeleteitem
-		integer hshgetitem
+c----------------------------------------------------------
+c
+c                     LIBHASH V 1.40
+c 
+c----------------------------------------------------------
+c
+c   Description:         store meshes in a hash table
+c   Author:              Loic MARECHAL
+c   Creation date:       dec 08 2015
+c   Last modification:   jun 25 2019
+c
+c----------------------------------------------------------
 
-        integer HshAny, HshVer, HshEdg, HshTri, HshQad
-		integer HshTet, HshPyr, HshPri, HshHex
 
-		parameter (HshAny=0)
-		parameter (HshVer=1)
-		parameter (HshEdg=2)
-		parameter (HshTri=3)
-		parameter (HshQad=4)
-		parameter (HshTet=5)
-		parameter (HshPyr=6)
-		parameter (HshPri=7)
-		parameter (HshHex=8)
+c     Procedures definition
+
+      external hshnewtable
+      external hshfreetable
+      external hshadditem
+      external hshdeleteitem
+      external hshgetitem
+
+      integer*8 hshnewtable
+      integer hshfreetable
+      integer hshadditem
+      integer hshdeleteitem
+      integer hshgetitem
+
+      integer HshAny, HshVer, HshEdg, HshTri, HshQad
+      integer HshTet, HshPyr, HshPri, HshHex
+
+c     Parameters definition
+
+      parameter (HshAny=0)
+      parameter (HshVer=1)
+      parameter (HshEdg=2)
+      parameter (HshTri=3)
+      parameter (HshQad=4)
+      parameter (HshTet=5)
+      parameter (HshPyr=6)
+      parameter (HshPri=7)
+      parameter (HshHex=8)
