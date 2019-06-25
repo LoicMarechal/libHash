@@ -10,7 +10,7 @@
 /*   Description:       derive the surface from the volume                    */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 30 2015                                           */
-/*   Last modification: mar 12 2018                                           */
+/*   Last modification: jun 25 2019                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -117,10 +117,8 @@ int main(int argc, char **argv)
       exit(1);
 
    GmfGetBlock(MshIdx, GmfVertices, 1, NmbVer, 0, NULL, NULL,
-               GmfDouble, &VerTab[1].crd[0], &VerTab[ NmbVer ].crd[0],
-               GmfDouble, &VerTab[1].crd[1], &VerTab[ NmbVer ].crd[1],
-               GmfDouble, &VerTab[1].crd[2], &VerTab[ NmbVer ].crd[2],
-               GmfInt,    &VerTab[1].ref,    &VerTab[ NmbVer ].ref);
+               GmfDoubleVec, 3, &VerTab[1].crd, &VerTab[ NmbVer ].crd,
+               GmfInt,          &VerTab[1].ref, &VerTab[ NmbVer ].ref);
 
    if(!(HshIdx = hsh_NewTable()))
       exit(1);
@@ -135,8 +133,8 @@ int main(int argc, char **argv)
          exit(1);
 
       GmfGetBlock(MshIdx, GmfTetrahedra, 1, NmbTet, 0, NULL, NULL,
-                  GmfIntTab, 4, &TetTab[1].idx[0], &TetTab[ NmbTet ].idx[0],
-                  GmfInt,       &TetTab[1].ref,    &TetTab[ NmbTet ].ref);
+                  GmfIntVec, 4, &TetTab[1].idx, &TetTab[ NmbTet ].idx,
+                  GmfInt,       &TetTab[1].ref, &TetTab[ NmbTet ].ref);
 
       for(i=1;i<=NmbTet;i++)
          for(j=0;j<4;j++)
@@ -153,8 +151,8 @@ int main(int argc, char **argv)
          exit(1);
 
       GmfGetBlock(MshIdx, GmfPyramids, 1, NmbPyr, 0, NULL, NULL,
-                  GmfIntTab, 5, &PyrTab[1].idx[0], &PyrTab[ NmbPyr ].idx[0],
-                  GmfInt,       &PyrTab[1].ref,    &PyrTab[ NmbPyr ].ref);
+                  GmfIntVec, 5, &PyrTab[1].idx, &PyrTab[ NmbPyr ].idx,
+                  GmfInt,       &PyrTab[1].ref, &PyrTab[ NmbPyr ].ref);
 
       for(i=1;i<=NmbPyr;i++)
          for(j=0;j<5;j++)
@@ -171,8 +169,8 @@ int main(int argc, char **argv)
          exit(1);
 
       GmfGetBlock(MshIdx, GmfPrisms, 1, NmbPri, 0, NULL, NULL,
-                  GmfIntTab, 6, &PriTab[1].idx[0], &PriTab[ NmbPri ].idx[0],
-                  GmfInt,       &PriTab[1].ref,    &PriTab[ NmbPri ].ref);
+                  GmfIntVec, 6, &PriTab[1].idx, &PriTab[ NmbPri ].idx,
+                  GmfInt,       &PriTab[1].ref, &PriTab[ NmbPri ].ref);
 
       for(i=1;i<=NmbPri;i++)
          for(j=0;j<6;j++)
@@ -189,8 +187,8 @@ int main(int argc, char **argv)
          exit(1);
 
       GmfGetBlock(MshIdx, GmfHexahedra, 1, NmbHex, 0, NULL, NULL,
-                  GmfIntTab, 8, &HexTab[1].idx[0], &HexTab[ NmbHex ].idx[0],
-                  GmfInt,       &HexTab[1].ref,    &HexTab[ NmbHex ].ref);
+                  GmfIntVec, 8, &HexTab[1].idx, &HexTab[ NmbHex ].idx,
+                  GmfInt,       &HexTab[1].ref, &HexTab[ NmbHex ].ref);
 
       for(i=1;i<=NmbHex;i++)
          for(j=0;j<8;j++)
@@ -216,10 +214,8 @@ int main(int argc, char **argv)
 
    GmfSetKwd(MshIdx, GmfVertices, NmbVer);
    GmfSetBlock(MshIdx, GmfVertices, 1, NmbVer, 0, NULL, NULL,
-               GmfDouble, &VerTab[1].crd[0], &VerTab[ NmbVer ].crd[0],
-               GmfDouble, &VerTab[1].crd[1], &VerTab[ NmbVer ].crd[1],
-               GmfDouble, &VerTab[1].crd[2], &VerTab[ NmbVer ].crd[2],
-               GmfInt,    &VerTab[1].ref,    &VerTab[ NmbVer ].ref);
+               GmfDoubleVec, 3, &VerTab[1].crd, &VerTab[ NmbVer ].crd,
+               GmfInt,          &VerTab[1].ref, &VerTab[ NmbVer ].ref);
 
    // Search for unique triangles and quads which are the boundary ones
    if(NmbTet)
@@ -338,8 +334,8 @@ int main(int argc, char **argv)
    {
       GmfSetKwd(MshIdx, GmfTriangles, NmbTri);
       GmfSetBlock(MshIdx, GmfTriangles, 1, NmbTri, 0, NULL, NULL,
-                  GmfIntTab, 3, &TriTab[1].idx[0], &TriTab[ NmbTri ].idx[0],
-                  GmfInt,       &TriTab[1].ref,    &TriTab[ NmbTri ].ref);
+                  GmfIntVec, 3, &TriTab[1].idx, &TriTab[ NmbTri ].idx,
+                  GmfInt,       &TriTab[1].ref, &TriTab[ NmbTri ].ref);
 
       free(TriTab);
    }
@@ -348,8 +344,8 @@ int main(int argc, char **argv)
    {
       GmfSetKwd(MshIdx, GmfQuadrilaterals, NmbQad);
       GmfSetBlock(MshIdx, GmfQuadrilaterals, 1, NmbQad, 0, NULL, NULL,
-                  GmfIntTab, 4, &QadTab[1].idx[0], &QadTab[ NmbQad ].idx[0],
-                  GmfInt,       &QadTab[1].ref,    &QadTab[ NmbQad ].ref);
+                  GmfIntVec, 4, &QadTab[1].idx, &QadTab[ NmbQad ].idx,
+                  GmfInt,       &QadTab[1].ref, &QadTab[ NmbQad ].ref);
 
       free(QadTab);
    }
