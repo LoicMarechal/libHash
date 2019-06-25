@@ -36,7 +36,19 @@ project (libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGU
 
 include_directories (${PROJECT_SOURCE_DIR}/sources)
 add_subdirectory (sources)
-add_subdirectory (examples)
+
+find_package(libMeshb 7)
+
+if(libMeshb_FOUND)
+   include_directories (${libMeshb_INCLUDE_DIRS})
+   include_directories (${PROJECT_SOURCE_DIR}/examples)
+   add_subdirectory (examples)
+else()
+   message (WARNING "
+   libMeshb.7 could not be found.
+   Consequently, examples and utilities will not be built.
+   You can download it from GitHUB at https://github.com/LoicMarechal/libMeshb")
+endif()
 
 install (FILES LICENSE.txt copyright.txt DESTINATION share/libHash)
 install (DIRECTORY sample_meshes DESTINATION share/libHash)
