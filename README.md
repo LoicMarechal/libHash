@@ -1,8 +1,8 @@
-# libHash version 1.40
+## libHash version 1.40
 
-# Overview
+## Overview
 
-# Build for *Linux* or *macOS*
+## Build for *Linux* or *macOS*
 Simply follow these steps:
 - unarchive the ZIP file
 - `cd libHash-master`
@@ -12,7 +12,7 @@ Simply follow these steps:
 - `make`
 - `make install`
 
-# Build for *Windows*
+## Build for *Windows*
 - You first need to install [CMake](https://cmake.org/files/v3.7/cmake-3.7.2-win64-x64.msi). Do not forget to choose "add cmake to the path for all users", from the install panel.
 - Then you need a valid C compiler like the free [Visual Studio Express 2015](https://www.visualstudio.com/vs/visual-studio-express/)
 - unarchive the ZIP file
@@ -23,7 +23,7 @@ Simply follow these steps:
 - `cmake -DCMAKE_INSTALL_PREFIX=%HOMEPATH%\local ..\`
 - `cmake --build . --config Release --target INSTALL`
 
-# Usage
+## Usage
 The **libHash** library is written in *ANSI C*.  
 It is made of a single C file and a header file to be compiled and linked alongside the calling program.  
 It may be used in C, C++, F77 and F90 programs (Fortran 77 and 90 APIs are provided).  
