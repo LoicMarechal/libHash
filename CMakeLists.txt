@@ -70,14 +70,13 @@ include (CPack)
 ##################################
 # EXPORT CMAKE PACKAGE INFORMATION
 ##################################
-   
+
 include(CMakePackageConfigHelpers)
 file(WRITE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-"include(\${CMAKE_CURRENT_LIST_DIR}/meshb-target.cmake)
+"include(\${CMAKE_CURRENT_LIST_DIR}/hash-target.cmake)
 include(\${CMAKE_CURRENT_LIST_DIR}/libHash-target.cmake)
 set(libHash_INCLUDE_DIRS ${CMAKE_INSTALL_PREFIX}/include)
-set(libHash_LIBRARIES Hash.7)
-set(libHash_Fortran_LIBRARIES Hashf.7)
+set(libHash_LIBRARIES Hash.1)
 set(libHash_FOUND TRUE)
 ")
 write_basic_package_version_file(

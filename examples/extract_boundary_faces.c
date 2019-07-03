@@ -10,7 +10,7 @@
 /*   Description:       derive the surface from the volume                    */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 30 2015                                           */
-/*   Last modification: jun 25 2019                                           */
+/*   Last modification: jun 27 2019                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -107,11 +107,17 @@ int main(int argc, char **argv)
 
    // The program reads volume.meshb and writes surface.meshb files
    if(!(MshIdx = GmfOpenMesh("../sample_meshes/volume.meshb", GmfRead, &MshVer, &dim)))
+   {
+      puts("Cannot open file ../sample_meshes/volume.meshb");
       exit(1);
+   }
 
    // Allocate and read vertices
    if(!(NmbVer = GmfStatKwd(MshIdx, GmfVertices)))
+   {
+      puts("No vertices found in the mesh file");
       exit(1);
+   }
 
    if(!(VerTab = malloc( (NmbVer+1) * sizeof(VerSct))))
       exit(1);
@@ -121,7 +127,10 @@ int main(int argc, char **argv)
                GmfInt,          &VerTab[1].ref, &VerTab[ NmbVer ].ref);
 
    if(!(HshIdx = hsh_NewTable()))
+   {
+      puts("Failed to allocate the hash table");
       exit(1);
+   }
 
    printf("%d vertices read\n", NmbVer);
 
@@ -365,4 +374,6 @@ int main(int argc, char **argv)
 
    if(HexTab)
       free(HexTab);
+
+   return(0);
 }
