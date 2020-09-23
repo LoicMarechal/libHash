@@ -10,21 +10,17 @@ set (libHash_VERSION_MINOR 40)
 
 project(libHash VERSION "${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR}" LANGUAGES C)
 
-include (CheckLanguage)
-check_language (Fortran)
-if(CMAKE_Fortran_COMPILER)
-  enable_language(Fortran)
-endif()
-
-set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
-
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif ()
 
 if (WIN32)
-   set (CMAKE_C_FLAGS -DWIN32)
-   set (CMAKE_CONFIGURATION_TYPES Release)
+   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWIN32")
 else ()
-   set (CMAKE_C_FLAGS -O3)
-   set (CMAKE_Fortran_FLAGS -O3)
+   set(LINK_LIBRARIES "m")
+   if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+     set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/local" CACHE PATH "..." FORCE)
+   endif()
 endif ()
 
 project (libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGUAGES C)
