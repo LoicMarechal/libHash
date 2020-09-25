@@ -1,21 +1,23 @@
 ## libHash version 1.40
 
 ## Overview
+A hash table library that offers dynamicaly resizing tables and arbitrary number of hash keys insert and queries.
 
-## Build for *Linux* or *macOS*
-Simply follow these steps:
-- unarchive the ZIP file
-- `cd libHash-master`
-- `mkdir build`
-- `cd build`
-- `cmake ..`
-- `cmake --build . --target install`
 
-## Build for *Windows*
+## Build
+
+### Prerequisites for *Linux* or *macOS*
+- Install [CMake](https://cmake.org/files/v3.7/cmake-3.7.2-win64-x64.msi)
+- A valid C99 compiler
+- Open a shell window
+
+### Prerequisites for *Windows*
 - You first need to install [CMake](https://cmake.org/files/v3.7/cmake-3.7.2-win64-x64.msi). Do not forget to choose "add cmake to the path for all users", from the install panel.
-- Then you need a valid C compiler like the free [Visual Studio Express 2015](https://www.visualstudio.com/vs/visual-studio-express/)
+- Then you need a valid C compiler like the free [Visual Studio Community 2019](https://www.visualstudio.com/vs/visual-studio-express/)
+- Open the x64 Native Tools Command Prompt for VS (or x86 if you need to build a 32-bit version)
+
+### Build commands for all platforms
 - unarchive the ZIP file
-- open the windows shell
 - `cd libHash-master`
 - `mkdir build`
 - `cd build`
