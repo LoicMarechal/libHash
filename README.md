@@ -19,7 +19,7 @@ Simply follow these steps:
 - `cd libHash-master`
 - `mkdir build`
 - `cd build`
-- `cmake -DCMAKE_INSTALL_PREFIX=%HOMEPATH%\local ..\`
+- `cmake ..`
 - `cmake --build . --target INSTALL`
 
 ## Usage
