@@ -4,7 +4,7 @@
 # GLOBAL CONFIGURATION VARIABLES
 ################################
 
-cmake_minimum_required (VERSION 3.0.1)
+cmake_minimum_required (VERSION 3.7.2)
 set (libHash_VERSION_MAJOR 1)
 set (libHash_VERSION_MINOR 40)
 

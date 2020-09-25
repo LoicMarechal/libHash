@@ -22,7 +22,7 @@ A hash table library that offers dynamicaly resizing tables and arbitrary number
 - `mkdir build`
 - `cd build`
 - `cmake ..`
-- `cmake --build . --target INSTALL`
+- `cmake --build . --target install`
 
 ## Usage
 The **libHash** library is written in *ANSI C*.  
