@@ -7,8 +7,7 @@
 cmake_minimum_required (VERSION 3.7.2)
 set (libHash_VERSION_MAJOR 1)
 set (libHash_VERSION_MINOR 40)
-
-project(libHash VERSION "${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR}" LANGUAGES C)
+project(libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGUAGES C)
 
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -21,8 +20,6 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
       set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/local" CACHE PATH "..." FORCE)
    endif()
 endif ()
-
-project (libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGUAGES C)
 
 
 #######################################
