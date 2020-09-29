@@ -1,9 +1,7 @@
-## HIGH PRIORITY
+### STANDARD PRIORITY
+- write english documentation
 
-## STANDARD PRIORITY
-- english documentation
-
-## DONE
+### DONE
 - 64-bit integer mode with -DINT64
 - french documentation
 - moved the project to GitHub
