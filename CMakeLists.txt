@@ -10,7 +10,7 @@ set (libHash_VERSION_MINOR 40)
 project(libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGUAGES C)
 
 if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
+  set (CMAKE_BUILD_TYPE Release)
 endif ()
 
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL Linux)
@@ -19,9 +19,9 @@ endif ()
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
    if (WIN32)
-      set(CMAKE_INSTALL_PREFIX "$ENV{HOMEPATH}/local" CACHE PATH "..." FORCE)
+      set (CMAKE_INSTALL_PREFIX "$ENV{HOMEPATH}/local" CACHE PATH "..." FORCE)
    else ()
-      set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/local" CACHE PATH "..." FORCE)
+      set (CMAKE_INSTALL_PREFIX "$ENV{HOME}/local" CACHE PATH "..." FORCE)
    endif()
 endif ()
 
@@ -33,18 +33,18 @@ endif ()
 include_directories (${PROJECT_SOURCE_DIR}/sources)
 add_subdirectory (sources)
 
-find_package(libMeshb 7)
+find_package (libMeshb 7)
 
-if(libMeshb_FOUND)
+if (libMeshb_FOUND)
    include_directories (${libMeshb_INCLUDE_DIRS})
    include_directories (${PROJECT_SOURCE_DIR}/examples)
    add_subdirectory (examples)
-else()
+else ()
    message (WARNING "
    libMeshb.7 could not be found.
    Consequently, examples and utilities will not be built.
    You can download it from GitHUB at https://github.com/LoicMarechal/libMeshb")
-endif()
+endif ()
 
 install (FILES LICENSE.txt copyright.txt DESTINATION share/libHash)
 install (DIRECTORY sample_meshes DESTINATION share/libHash)
@@ -60,7 +60,7 @@ if (CPACK)
    set (CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/copyright.txt)
    set (CPACK_PACKAGE_VERSION_MAJOR ${libHash_VERSION_MAJOR})
    set (CPACK_PACKAGE_VERSION_MINOR ${libHash_VERSION_MINOR})
-   set(CPACK_COMPONENTS_ALL applications examples libraries headers)
+   set (CPACK_COMPONENTS_ALL applications examples libraries headers)
    include (CPack)
 endif ()
 
