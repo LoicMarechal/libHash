@@ -4,5 +4,5 @@
 ##################
 
 add_executable(extract_boundary extract_boundary_faces.c)
-target_link_libraries(extract_boundary Meshb.7 Hash.1)
+target_link_libraries(extract_boundary ${libMeshb_LIBRARIES} ${math_LIBRARIES} Hash.1)
 install (TARGETS extract_boundary DESTINATION share/libHash/examples COMPONENT examples)
