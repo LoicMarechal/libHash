@@ -9,6 +9,8 @@ set (libHash_VERSION_MAJOR 1)
 set (libHash_VERSION_MINOR 40)
 project(libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGUAGES C)
 
+option(WITH_CPACK "Enable cpack target to generate a zip file containing binaries" OFF)
+
 if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif ()
@@ -19,11 +21,13 @@ endif ()
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
    if (WIN32)
-      set (CMAKE_INSTALL_PREFIX "$ENV{HOMEPATH}/local" CACHE PATH "..." FORCE)
+      set(CMAKE_INSTALL_PREFIX "$ENV{HOMEPATH}/cmakebuilds" CACHE PATH "..." FORCE)
    else ()
-      set (CMAKE_INSTALL_PREFIX "$ENV{HOME}/local" CACHE PATH "..." FORCE)
+      set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/cmakebuilds/$ENV{OSTYPE}-$ENV{MACHTYPE}" CACHE PATH "..." FORCE)
    endif()
 endif ()
+
+list (APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
 
 
 #######################################
@@ -54,7 +58,7 @@ install (DIRECTORY sample_meshes DESTINATION share/libHash)
 # SET PACKAGE AND DEPLOYMENT VARIABLES
 ######################################
 
-if (CPACK)
+if (WITH_CPACK)
    include (InstallRequiredSystemLibraries)
    set (CPACK_GENERATOR TXZ)
    set (CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/copyright.txt)
@@ -85,3 +89,12 @@ install(FILES
    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
    DESTINATION lib/cmake/${PROJECT_NAME})
+
+
+##################################
+# PRINT OPERATIONS TO BE CONDUCTED
+##################################
+
+message("-- Build mode            : " ${CMAKE_BUILD_TYPE})
+message("-- cpack target enabled  : " ${WITH_CPACK})
+message("-- Install directory     : " ${CMAKE_INSTALL_PREFIX})
