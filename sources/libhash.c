@@ -42,10 +42,10 @@
 /* Macros                                                                     */
 /*----------------------------------------------------------------------------*/
 
-#ifndef min
+#ifndef MIN
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #endif
-#ifndef max
+#ifndef MAX
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #endif
 
