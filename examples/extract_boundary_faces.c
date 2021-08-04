@@ -10,7 +10,7 @@
 /*   Description:       derive the surface from the volume                    */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 30 2015                                           */
-/*   Last modification: jun 27 2019                                           */
+/*   Last modification: aug 04 2021                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
    }
 
    // Allocate and read vertices
-   if(!(NmbVer = GmfStatKwd(MshIdx, GmfVertices)))
+   if(!(NmbVer = (int)GmfStatKwd(MshIdx, GmfVertices)))
    {
       puts("No vertices found in the mesh file");
       exit(1);
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
       exit(1);
 
    GmfGetBlock(MshIdx, GmfVertices, 1, NmbVer, 0, NULL, NULL,
-               GmfDoubleVec, 3, &VerTab[1].crd, &VerTab[ NmbVer ].crd,
+               GmfDoubleVec, 3,  VerTab[1].crd,  VerTab[ NmbVer ].crd,
                GmfInt,          &VerTab[1].ref, &VerTab[ NmbVer ].ref);
 
    if(!(HshIdx = hsh_NewTable()))
@@ -136,13 +136,13 @@ int main(int argc, char **argv)
 
 
    // Check existence, allocate, read and hash the tets
-   if((NmbTet = GmfStatKwd(MshIdx, GmfTetrahedra)))
+   if((NmbTet = (int)GmfStatKwd(MshIdx, GmfTetrahedra)))
    {
       if(!(TetTab = malloc( (NmbTet+1) * sizeof(TetSct))))
          exit(1);
 
       GmfGetBlock(MshIdx, GmfTetrahedra, 1, NmbTet, 0, NULL, NULL,
-                  GmfIntVec, 4, &TetTab[1].idx, &TetTab[ NmbTet ].idx,
+                  GmfIntVec, 4,  TetTab[1].idx,  TetTab[ NmbTet ].idx,
                   GmfInt,       &TetTab[1].ref, &TetTab[ NmbTet ].ref);
 
       for(i=1;i<=NmbTet;i++)
@@ -154,13 +154,13 @@ int main(int argc, char **argv)
 
 
    // Check existence, allocate, read and hash the pyramids
-   if((NmbPyr = GmfStatKwd(MshIdx, GmfPyramids)))
+   if((NmbPyr = (int)GmfStatKwd(MshIdx, GmfPyramids)))
    {
       if(!(PyrTab = malloc( (NmbPyr+1) * sizeof(PyrSct))))
          exit(1);
 
       GmfGetBlock(MshIdx, GmfPyramids, 1, NmbPyr, 0, NULL, NULL,
-                  GmfIntVec, 5, &PyrTab[1].idx, &PyrTab[ NmbPyr ].idx,
+                  GmfIntVec, 5,  PyrTab[1].idx,  PyrTab[ NmbPyr ].idx,
                   GmfInt,       &PyrTab[1].ref, &PyrTab[ NmbPyr ].ref);
 
       for(i=1;i<=NmbPyr;i++)
@@ -172,13 +172,13 @@ int main(int argc, char **argv)
 
 
    // Check existence, allocate, read and hash the prisms
-   if((NmbPri = GmfStatKwd(MshIdx, GmfPrisms)))
+   if((NmbPri = (int)GmfStatKwd(MshIdx, GmfPrisms)))
    {
       if(!(PriTab = malloc( (NmbPri+1) * sizeof(PriSct))))
          exit(1);
 
       GmfGetBlock(MshIdx, GmfPrisms, 1, NmbPri, 0, NULL, NULL,
-                  GmfIntVec, 6, &PriTab[1].idx, &PriTab[ NmbPri ].idx,
+                  GmfIntVec, 6,  PriTab[1].idx,  PriTab[ NmbPri ].idx,
                   GmfInt,       &PriTab[1].ref, &PriTab[ NmbPri ].ref);
 
       for(i=1;i<=NmbPri;i++)
@@ -190,13 +190,13 @@ int main(int argc, char **argv)
 
 
    // Check existence, allocate, read and hash the hexes
-   if((NmbHex = GmfStatKwd(MshIdx, GmfHexahedra)))
+   if((NmbHex = (int)GmfStatKwd(MshIdx, GmfHexahedra)))
    {
       if(!(HexTab = malloc( (NmbHex+1) * sizeof(HexSct))))
          exit(1);
 
       GmfGetBlock(MshIdx, GmfHexahedra, 1, NmbHex, 0, NULL, NULL,
-                  GmfIntVec, 8, &HexTab[1].idx, &HexTab[ NmbHex ].idx,
+                  GmfIntVec, 8,  HexTab[1].idx,  HexTab[ NmbHex ].idx,
                   GmfInt,       &HexTab[1].ref, &HexTab[ NmbHex ].ref);
 
       for(i=1;i<=NmbHex;i++)

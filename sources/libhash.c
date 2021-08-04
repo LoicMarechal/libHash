@@ -9,7 +9,7 @@
 /*   Description:       various operations on hash tables                     */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 25 2015                                           */
-/*   Last modification: jun 19 2019                                           */
+/*   Last modification: aug 04 2021                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -135,7 +135,7 @@ itg hsh_FreeTable(int64_t HshIdx)
    itg i, p, byt = 0;
 
    if(tab->NmbHsh > 0)
-      byt = tab->mem / tab->NmbHsh;
+      byt = (itg)(tab->mem / tab->NmbHsh);
 
    // Loop over blocks of tupple and free them.
    // The last tupple of each block contains nothing but a link to the next block
