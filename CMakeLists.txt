@@ -10,6 +10,7 @@ set (libHash_VERSION_MINOR 40)
 project(libHash VERSION ${libHash_VERSION_MAJOR}.${libHash_VERSION_MINOR} LANGUAGES C)
 
 option(WITH_CPACK "Enable cpack target to generate a zip file containing binaries" OFF)
+option(WITH_CTEST "Enable ctest with features and regressions test-cases"          OFF)
 
 if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
@@ -52,6 +53,12 @@ endif ()
 
 install (FILES LICENSE.txt copyright.txt DESTINATION share/libHash)
 install (DIRECTORY sample_meshes DESTINATION share/libHash)
+
+if(WITH_CTEST)
+   enable_testing()
+   include_directories(${PROJECT_SOURCE_DIR}/testing)
+   add_subdirectory(testing)
+endif()
 
 
 ######################################
