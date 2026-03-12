@@ -2,7 +2,6 @@
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[francais]{babel}
 \usepackage{multirow,array}
 \usepackage{graphicx}
 \usepackage{a4wide}
@@ -116,7 +115,7 @@ La taille de la table étant adaptative et le nombre de clefs variable, aucun ar
 {\tt Table = hsh\_NewTable();}
 
 \subsubsection*{Commentaires}
-Retourne une étiquette unique identifiant la table et qui devra être passé à toutes les autres fonctions.
+Retourne un entier 64 bits (int64\_t), unique identifiant la table et qui devra être passé à toutes les autres fonctions.
 
 
 \subsection{hsh\_FreeTable}
