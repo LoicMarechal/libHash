@@ -42,7 +42,7 @@ list (APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
 include_directories (${PROJECT_SOURCE_DIR}/sources)
 add_subdirectory (sources)
 
-find_package (libMeshb 7)
+find_package (libMeshb 8)
 
 if (libMeshb_FOUND)
    include_directories (${libMeshb_INCLUDE_DIRS})
