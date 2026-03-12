@@ -10,7 +10,7 @@
 /*   Description:       derive the surface from the volume                    */
 /*   Author:            Loic MARECHAL                                         */
 /*   Creation date:     sep 30 2015                                           */
-/*   Last modification: aug 04 2021                                           */
+/*   Last modification: mar 12 2026                                           */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -21,7 +21,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <libmeshb7.h>
+#include <libmeshb8.h>
 #include <libhash.h>
 
 
